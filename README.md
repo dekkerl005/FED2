@@ -1,6 +1,5 @@
-FED2
-====
-Jaar 3
-
 #Frontend Development
-test
+Het begin van de V2 en een nieuwe start met Javascript
+
+##Lex Dekker
+
