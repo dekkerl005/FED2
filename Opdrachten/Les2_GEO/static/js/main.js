@@ -1,7 +1,6 @@
 var cmdGeo = cmdGeo || {};
 
 (function()){
-
 	// Variable declaration
 	cmdGeo.SANDBOX = "SANDBOX";
 	cmdGeo.LINEAIR = "LINEAIR";
