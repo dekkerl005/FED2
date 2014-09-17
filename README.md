@@ -6,5 +6,5 @@ Het begin van de V2 en een nieuwe start met Javascript.
 2. Closure
 3. NameSpace
 4. Operators
-5. Var (niet vergeten)
+5. Modules
 
