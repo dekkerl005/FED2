@@ -1,0 +1,21 @@
+body > header {
+	position: absolute;
+	top: 0;
+}
+
+#content {
+	margin-top: 5em;
+}
+
+section {
+	display: none;
+}
+
+section.active  {
+	display: block;
+}
+
+/* Reset Section */
+section#about > section {
+	display: block;
+}
