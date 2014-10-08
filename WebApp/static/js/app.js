@@ -6,8 +6,15 @@ var app = app || {};
 
 	app.controller = {
 		init: function(){
+			app.config.init();
 			app.router.init();
 			app.sections.init();
+		}
+	}
+
+	app.data = {
+		init: function() {
+			// body...
 		}
 	}
 
@@ -17,11 +24,11 @@ var app = app || {};
 			routie({
 			    'about': function() {
 			    	console.log("About");
-					app.sections.toggle("#about");
+					app.sections.toggle("about");
 			    },
 			    'movies': function() {
 			    	console.log("Movies");
-					app.sections.toggle("#movies");
+					app.sections.toggle("movies");
 			    }
 			});
 		}
@@ -49,8 +56,11 @@ var app = app || {};
 		},
 
 		movies: {
-			title: "Favorite movies",
-			moviesContent: [
+
+
+
+			/*title: "Favorite movies",
+			movieCollection: [
 				{
 					title: "Shawshank Redemption",
 					titleReleaseDate: "Release date: ",
@@ -82,7 +92,7 @@ var app = app || {};
 					description: "When Batman, Gordon and Harvey Dent launch an assault on the mob, they let the clown out of the box, the Joker, bent on turning Gotham on itself and bringing any heroes down to his level.",
 					cover: "static/images/the-dark-knight.jpg"
 				}
-			]
+			]*/
 		}
 
 	}
@@ -100,22 +110,28 @@ var app = app || {};
 		},
 
 		movies: function() {
-			movies: {
-				Transparency.render(document.getElementById('movies'), app.content.movies);
 
-			}
+			var self = this;
 
-			moviesContent: {
-				Transparency.render(document.getElementsByClassName('moviesContent')[0], app.content.movies.moviesContent, app.directives);
-			}
+			app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
+
+
+		},
+
+		moviesSucces: function(text) {
+			console.log('Parsed data', JSON.parse(text));
+			app.content.movies = JSON.parse(text);
+			console.log('Data from data object', app.content.movies);
+
+			Transparency.render(document.getElementById('movies'), app.content.movies);
 		},
 
 		toggle: function(section) {
-			if (section == "#about") {
+			if (section == "about") {
 				document.querySelector('#about').classList.add('active');
 				document.querySelector('#movies').classList.remove('active');
 			} 
-			else if (section == "#movies") {
+			else if (section == "movies") {
 				document.querySelector('#movies').classList.add('active');
 				document.querySelector('#about').classList.remove('active');
 			}
@@ -123,13 +139,45 @@ var app = app || {};
 
 	}
 
-	app.directives = {
+	app.config = {
+		init: function() {
+            this.transparency();
+        },
 
-	  	cover: {
-		    src: function(params) {
-		      	return this.cover;
-		    }
-	  	}
+        // Custom binding name
+        transparency: function() {
+            Transparency.matcher = function(element, key) {
+                return element.el.getAttribute('data-name') == key;
+            };
+        },
+
+		directives: {
+			cover: {
+			    src: function(params) {
+			      	return this.cover;
+			    }
+		  	}
+		},
+
+		xhr: {
+			trigger: function (type, url, success, data) {
+				var req = new XMLHttpRequest;
+
+				req.open(type, url, true);
+
+				req.setRequestHeader('Content-type','application/json');
+
+				type === 'POST' ? req.send(data) : req.send(null);
+
+				req.onreadystatechange = function() {
+					if (req.readyState === 4) {
+						if (req.status === 200 || req.status === 201) {
+							success(req.responseText);
+						}
+					}
+				}
+			}
+		}
 
 	}
 

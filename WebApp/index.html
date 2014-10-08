@@ -11,34 +11,77 @@
     </head>
     <body>
 		<main id="content">
+
 			<section id="about" data-route="about">
 				<section>
 					<header>
-						<h1 data-bind="title"></h1>
-						<div data-bind="description">
-							<p data-bind="paragraph"></p>
+						<h1 data-name="title"></h1>
+						<div data-name="description">
+							<p data-name="paragraph"></p>
 						</div>
 					</header>
 				</section>
 			</section>
 
 			<section id="movies" data-route="movies">
-				<h1 data-bind="title"></h1>
-				<div class="moviesContent">
+				<h1 data-name="title"></h1>
+
+				<div id="genres">
+					<a href="#movies">Alle</a>
+					<div class="genreCollection">
+						<a href="#movies/genre/" data-name="genre"></a>
+					</div>
+				</div>
+
+				<div class="movieCollection">
 					<article>
 						<header>
-							<h1 data-bind="title"></h1>
-							<em data-bind="titleReleaseDate"><time data-bind="releaseDate"></time></em>
+							<h1 data-name="title"></h1>
+							<em data-name="titleReleaseDate"><time data-name="releaseDate"></time></em>
 						</header>
 
 						<figure>
-							<img data-bind="cover">
+							<img data-name="cover">
 						</figure>
 
-						<p data-bind="description"></p>
+						<p data-name="description"></p>
 					</article>
-				</div>
+				</div> 
 			</section>
+
+		<section data-route="movie" id="movie">
+	        <article>
+	            <header>
+	                <h1 data-name="title"></h1>
+	                <em>Release date: <time data-name="release_date"></time></em>
+	            </header>
+
+	            <figure>
+	                <img src="" alt="" data-name="cover">
+	            </figure>
+
+	            <p data-name="plot"></p>
+
+
+	            <section id="actors">
+	                <h1>Actors</h1>
+	                <div data-name="actors">
+	                    <article>
+	                        <figure>
+	                            <img src="" alt="" data-name="url_photo">
+	                        </figure>
+	                        <header>
+	                            <a href="" data-name="url_character"><h1 data-name="character"></h1></a>
+	                            Actor name: <a href="" data-name="url_profile"><h2 data-name="actor_name"></h2></a>
+	                        </header>
+	                    </article>
+	                    <div class="clear"></div>
+	                </div>
+	            </section>
+
+	        </article>
+	    </section>
+
 		</main>
 
 		<header>
