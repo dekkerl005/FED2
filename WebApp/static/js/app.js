@@ -12,23 +12,21 @@ var app = app || {};
 		}
 	}
 
-	app.data = {
-		init: function() {
-			// body...
-		}
-	}
-
 	app.router = {
 
 		init: function() {
 			routie({
-			    'about': function() {
+			    '/about': function() {
 			    	console.log("About");
 					app.sections.toggle("about");
 			    },
-			    'movies': function() {
+			    '/movies': function() {
 			    	console.log("Movies");
 					app.sections.toggle("movies");
+			    },
+			    '/movies/movie/:id':function(){
+			    	console.log("Movie in detail");
+			    	app.sections.toggle("movie");
 			    }
 			});
 		}
@@ -55,51 +53,14 @@ var app = app || {};
 			]
 		},
 
-		movies: {
-
-
-
-			/*title: "Favorite movies",
-			movieCollection: [
-				{
-					title: "Shawshank Redemption",
-					titleReleaseDate: "Release date: ",
-					releaseDate: "14 October 1994",
-					description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-					cover: "static/images/shawshank-redemption.jpg"
-
-				},
-				{
-					title: "The Godfather",
-					titleReleaseDate: "Release date: ",
-					releaseDate: "24 March 1972",
-					description: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
-					cover: "static/images/the-godfather.jpg"
-
-				},
-				{
-					title: "Pulp Fiction",
-					titleReleaseDate: "Release date: ",
-					releaseDate: "14 October 1994",
-					description: "The lives of two mob hit men, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-					cover: "static/images/pulp-fiction.jpg"
-
-				},
-				{
-					title: "The Dark Knight",
-					titleReleaseDate: "Release date: ",
-					releaseDate: "18 July 2008",
-					description: "When Batman, Gordon and Harvey Dent launch an assault on the mob, they let the clown out of the box, the Joker, bent on turning Gotham on itself and bringing any heroes down to his level.",
-					cover: "static/images/the-dark-knight.jpg"
-				}
-			]*/
-		}
+		movies:{}
 
 	}
 
 	app.sections = {
 
 		init: function() {
+			app.sections.manipulateData();
 			app.sections.about();
 			app.sections.movies();
 			app.sections.toggle();
@@ -110,29 +71,60 @@ var app = app || {};
 		},
 
 		movies: function() {
-
 			var self = this;
 
-			app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
+			if(localStorage.getItem('movieData')) {
+				// Render movieCollection
+				Transparency.render(document.getElementById('movieCollection'), app.content.movies, app.config.directives);
+				// Render movie in detail
+				Transparency.render(document.getElementById('movie'), JSON.parse(localStorage.getItem('movieData')), app.config.directives);
+			}
 
-
+			else {
+				app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.movieData, "JSON");
+			}
 		},
 
-		moviesSucces: function(text) {
-			console.log('Parsed data', JSON.parse(text));
+		movieData: function(text) {
 			app.content.movies = JSON.parse(text);
-			console.log('Data from data object', app.content.movies);
 
-			Transparency.render(document.getElementById('movies'), app.content.movies);
+			Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
+			localStorage.setItem('movieData', text);
 		},
+
+
+		manipulateData: function() {
+
+            var data = JSON.parse(localStorage.getItem('movieData'));
+
+            // map reduce
+            _.map(data, function (movie, i){
+                movie.reviews = _.reduce(movie.reviews, function(memo, review) { return memo + review.score; }, 0) / movie.reviews.length;
+                // movie.directors = _.reduce(movie.directors, function(memo, director){ return memo + director.name + ' '; }, '');
+                //movie.actors    = _.reduce(movie.actors,    function(memo, actor){    return memo + actor.actor_name + ', ';}, '');
+                //return movie;
+                console.log("Review score: " + movie.reviews);
+                return movie;
+            })
+            app.content.movies = data;
+            console.log(app.content.movies);
+            return data;
+        },
 
 		toggle: function(section) {
 			if (section == "about") {
 				document.querySelector('#about').classList.add('active');
+				document.querySelector('#movie').classList.remove('active');
 				document.querySelector('#movies').classList.remove('active');
 			} 
 			else if (section == "movies") {
+				document.querySelector('#movie').classList.remove('active');
 				document.querySelector('#movies').classList.add('active');
+				document.querySelector('#about').classList.remove('active');
+			}
+			else if (section == "movie") {
+				document.querySelector('#movie').classList.add('active');
+				document.querySelector('#movies').classList.remove('active');
 				document.querySelector('#about').classList.remove('active');
 			}
 		}
@@ -152,12 +144,49 @@ var app = app || {};
         },
 
 		directives: {
+			movie_url: {
+		  		href: function(params) {
+		  			return '#/movies/movie/' + (this.id - 1);
+		  		}
+		  	},
+
 			cover: {
 			    src: function(params) {
 			      	return this.cover;
 			    }
-		  	}
+		  	},
+
+		  	genre: {
+                href: function(params) {
+                    return params.value + this.genre;
+                }
+            },
+
+		  	actors: {
+                url_photo: {
+                    src: function(params) {
+                        return this.url_photo;
+                    }
+                },
+                url_character: {
+                    text: function(params) {
+                        return params.value;
+                    },
+                    href: function(params) {
+                        return this.url_character;
+                    }
+                },
+                url_profile: {
+                    text: function(params) {
+                        return params.value;
+                    },
+                    href: function(params) {
+                        return this.url_profile;
+                    }
+                }
+            }
 		},
+
 
 		xhr: {
 			trigger: function (type, url, success, data) {
