@@ -77,7 +77,7 @@ var app = app || {};
 				// Render movieCollection
 				Transparency.render(document.getElementById('movieCollection'), app.content.movies, app.config.directives);
 				// Render movie in detail
-				Transparency.render(document.getElementById('movie'), JSON.parse(localStorage.getItem('movieData')), app.config.directives);
+				Transparency.render(document.getElementById('movie'), app.content.movies, app.config.directives);
 			}
 
 			else {
@@ -100,9 +100,6 @@ var app = app || {};
             // map reduce
             _.map(data, function (movie, i){
                 movie.reviews = _.reduce(movie.reviews, function(memo, review) { return memo + review.score; }, 0) / movie.reviews.length;
-                // movie.directors = _.reduce(movie.directors, function(memo, director){ return memo + director.name + ' '; }, '');
-                //movie.actors    = _.reduce(movie.actors,    function(memo, actor){    return memo + actor.actor_name + ', ';}, '');
-                //return movie;
                 console.log("Review score: " + movie.reviews);
                 return movie;
             })
