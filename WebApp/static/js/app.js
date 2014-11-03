@@ -16,18 +16,33 @@ var app = app || {};
 
 		init: function() {
 			routie({
-			    '/about': function() {
+			    'about': function() {
 			    	console.log("About");
 					app.sections.toggle("about");
 			    },
-			    '/movies': function() {
+			    'movies': function() {
 			    	console.log("Movies");
-					app.sections.toggle("movies");
+					app.sections.movies();
 			    },
-			    '/movies/movie/:id':function(){
-			    	console.log("Movie in detail");
-			    	app.sections.toggle("movie");
-			    }
+                'movies/genre/:genre':function(genre){
+                    console.log("Genre: " + genre);
+                    app.sections.moviesByGenre(genre);
+                },
+                
+                'movies/:id': function(id){
+                    console.log("details page of movie " + id);
+                    app.sections.movieDetail(id);
+                },
+                '*': function() {
+                    // app.sections.toggle('section[data-route="about"]');
+					app.sections.toggle("about");
+
+                    console.log("route changed: default");
+
+                    app.content.about
+                    console.log("get data for: about");
+                }
+                
 			});
 		}
 
@@ -53,81 +68,126 @@ var app = app || {};
 			]
 		},
 
-		movies:{}
+		movieReviews: {},
 
+		movies: {},
 	}
+    
+    app.hideAllSections = function() {
+        _.each(document.getElementsByClassName("section"), function(el){
+            el.classList.remove('active'); 
+        });
+    }
+    
+    app.manipulatieData =  {
+            reviewData: function() {
+                console.log("manipulate review scores")
+                // get data
+                var data = JSON.parse(localStorage.getItem('films'));
+                //map reduce
+                _.map(data, function (movie, i) {
+                        movie.reviews = _.reduce(movie.reviews,   function(memo, review){ return memo + review.score; }, 0) / movie.reviews.length;
+
+                console.log(movie.reviews)
+                return movie;
+                })  
+	        app.content.movies = data;
+	        console.log(app.content.movies)
+	        return data;
+         
+        }
+    }
 
 	app.sections = {
 
 		init: function() {
-			app.sections.manipulateData();
+            app.manipulatieData.reviewData();
 			app.sections.about();
 			app.sections.movies();
 			app.sections.toggle();
+			
 		},
 
 		about: function() {
-			Transparency.render(document.getElementById('about'), app.content.about);
+			app.hideAllSections();
+            Transparency.render(document.getElementById('about'), app.content.about);
 		},
 
 		movies: function() {
-			var self = this;
+			app.hideAllSections();
+            var self = this;
 
-			if(localStorage.getItem('movieData')) {
-				// Render movieCollection
-				Transparency.render(document.getElementById('movieCollection'), app.content.movies, app.config.directives);
-				// Render movie in detail
-				Transparency.render(document.getElementById('movie'), app.content.movies, app.config.directives);
+			// Movies
+            document.getElementById('movies').classList.add('active');
+           	
+			if(localStorage.getItem('films')){
+				Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
+				Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
+			}
+			else{
+				app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
+
 			}
 
-			else {
-				app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.movieData, "JSON");
-			}
 		},
 
-		movieData: function(text) {
+		moviesSucces: function(text) {
+            app.hideAllSections();
+			console.log('Parsed data', JSON.parse(text));
 			app.content.movies = JSON.parse(text);
+			console.log('Data from data object', app.content.movies);
 
 			Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
-			localStorage.setItem('movieData', text);
+			Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
+
+			localStorage.setItem('films', text);
 		},
-
-
-		manipulateData: function() {
-
-            var data = JSON.parse(localStorage.getItem('movieData'));
-
-            // map reduce
-            _.map(data, function (movie, i){
-                movie.reviews = _.reduce(movie.reviews, function(memo, review) { return memo + review.score; }, 0) / movie.reviews.length;
-                console.log("Review score: " + movie.reviews);
-                return movie;
-            })
-            app.content.movies = data;
-            console.log(app.content.movies);
-            return data;
+        
+        moviesByGenre:function(genre){
+            app.hideAllSections();
+            document.getElementById('movies').classList.add('active');
+            
+            var movies = app.content.movies;
+            
+            var filteredMovies = _.filter(movies, function(movie){
+                for(var i=0; i<movie.genres.length; i++){
+                    if(movie.genres[i] == genre) return true;
+                }
+                return false;
+            });
+            
+            Transparency.render(document.getElementById('movies'), filteredMovies, app.config.directives);
+        },
+        
+        movieDetail: function(id){
+            app.hideAllSections();
+            
+            var movies = app.content.movies;
+            
+            id = parseInt(id);
+            
+            var movie = _.findWhere(movies, {id: id});
+            
+            document.getElementById('detail').classList.add('active');
+            Transparency.render(document.getElementById('detail'), movie, app.config.directives);
         },
 
 		toggle: function(section) {
 			if (section == "about") {
+				app.hideAllSections();
 				document.querySelector('#about').classList.add('active');
-				document.querySelector('#movie').classList.remove('active');
-				document.querySelector('#movies').classList.remove('active');
 			} 
 			else if (section == "movies") {
-				document.querySelector('#movie').classList.remove('active');
+				app.hideAllSections();
 				document.querySelector('#movies').classList.add('active');
-				document.querySelector('#about').classList.remove('active');
-			}
-			else if (section == "movie") {
-				document.querySelector('#movie').classList.add('active');
-				document.querySelector('#movies').classList.remove('active');
-				document.querySelector('#about').classList.remove('active');
+			} else {
+				app.hideAllSections();
+				document.querySelector('#about').classList.add('active');
 			}
 		}
 
 	}
-
+    
 	app.config = {
 		init: function() {
             this.transparency();
@@ -141,25 +201,41 @@ var app = app || {};
         },
 
 		directives: {
-			movie_url: {
-		  		href: function(params) {
-		  			return '#/movies/movie/' + (this.id - 1);
-		  		}
-		  	},
-
 			cover: {
 			    src: function(params) {
 			      	return this.cover;
 			    }
 		  	},
-
-		  	genre: {
+            
+            readMore: {
                 href: function(params) {
-                    return params.value + this.genre;
+                    return '#movies/' + this.id;
                 }
             },
 
-		  	actors: {
+            genres: { 
+                genre: {
+                    href: function() {
+                        return "#movies/genre/" + (this.value);
+                    },
+                    text: function() {
+                        return this.value;
+                    }
+                }
+            },
+
+            reviews: {
+				text: function(){
+					if(isNaN(this.reviews)){
+						return 'No score';
+					}
+					else {
+						return this.reviews;
+					}
+				}
+			},
+
+            actors: {
                 url_photo: {
                     src: function(params) {
                         return this.url_photo;
@@ -182,13 +258,13 @@ var app = app || {};
                     }
                 }
             }
+            
 		},
-
 
 		xhr: {
 			trigger: function (type, url, success, data) {
 				var req = new XMLHttpRequest;
-
+				
 				req.open(type, url, true);
 
 				req.setRequestHeader('Content-type','application/json');
@@ -206,8 +282,20 @@ var app = app || {};
 		}
 
 	}
-
-
 })();
+// app.controller.init();
 
-app.controller.init();
+
+var image = document.createElement('img');
+image.setAttribute('src', 'static/images/ajax-loader.gif');
+document.getElementsByTagName('body')[0].appendChild(image);
+
+setTimeout(
+	function(){
+		image.parentNode.removeChild(image);
+		app.controller.init();
+	}, 400);
+
+
+
+

@@ -1,29 +1,16 @@
-body > header {
+body > header nav {
 	position:absolute;
 	top:0;
 }
 
-
-#content {
-	margin-top:4em;
+#content{
+	margin-top: 5em;
 }
 
-section {
+section{
 	display: none;
 }
 
-section.active {
+.active{
 	display: block;
-}
-
-main > section {
-	background: #eee;
-}
-
-section#movies h2, section#movie h2  {
-	font-size: 100%;
-}
-
-section#movie h1 {
-	font-size: 130%;
 }

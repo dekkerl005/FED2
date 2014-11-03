@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta name="description" content="Web App V1, basic JavaScript Skeleton, Fed2">
+        <meta name="description" content="Web App V1, basic JavaScript Skeleton">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>My Favorite Movies</title>
         <link rel="stylesheet" href="static/css/style.css">
@@ -12,7 +12,7 @@
     <body>
 		<main id="content">
 
-			<section id="about" data-route="about">
+			<section class="section" id="about" data-route="about">
 				<header>
 					<h1 data-name="title"></h1>
 					<div data-name="description">
@@ -21,115 +21,104 @@
 				</header>
 			</section>
 
-			<section data-route="movies" id="movies">
-				<h1>Favorite Movies</h1>
-
-				<div id="movieCollection">
-			        <article>
-			            <header>
-			                <a href="#movie/" data-name="movie_url"><h1 data-name="title"></h1></a>
-			                <h2>Review score: <span data-name="reviews"></span></h2>
-			                <em>Release date: <time data-name="release_date"></time></em>
-			            </header>
-
-			            <figure>
-			                <img src="" alt="" data-name="cover">
-			            </figure>
-
-			            <p data-name="plot"></p>
-
-			          <!--   <section id="actors">
-			                <h1>Actors</h1>
-			                <div data-name="actors">
-			                    <article>
-			                        <figure>
-			                            <img src="" alt="" data-name="url_photo">
-			                        </figure>
-			                        <header>
-			                            <a href="" data-name="url_character"><h1 data-name="character"></h1></a>
-			                            Actor name: <a href="" data-name="url_profile"><h2 data-name="actor_name"></h2></a>
-			                        </header>
-			                    </article>
-			                    <div class="clear"></div>
-			                </div>
-			            </section> -->
-
-			        </article>
-		        </div> 
-		    </section>
-
-		    <section data-route="movie" id="movie">
-		        <article>
+			<div>
+				<h2>Genre:</h2>
+				<ul data-name="genres">
+					<li>
+						<a href="#movies/genre/Crime">Crime</a>
+					</li>
+				</ul>
+			</div>
+			<section class="section" id="movies" data-route="movies">
+				<article>
 		            <header>
 		                <h1 data-name="title"></h1>
+		                <h2>Score: <span data-name="reviews"></span></h2>
 		                <em>Release date: <time data-name="release_date"></time></em>
-			            <h2>Review score: <span data-name="reviews"></span></h2>
-
 		            </header>
 
 		            <figure>
 		                <img src="" alt="" data-name="cover">
 		            </figure>
 
+		            <div>
+						<h2>Genre:</h2>
+						<ul data-name="genres">
+							<li>
+								<a data-name="genre"></a>
+							</li>
+						</ul>
+					</div>
+
 		            <p data-name="plot"></p>
-
-		            <!-- <section id="actors"> -->
-		                <h1>Actors</h1>
-		                <div data-name="actors">
-		                    <article>
-		                        <figure>
-		                            <img src="" alt="" data-name="url_photo">
-		                        </figure>
-		                        <header>
-		                            <a href="" data-name="url_character">
-		                            	<h2 data-name="character"></h2>
-		                            </a>
-		                            <p>Actor name: <a href="" data-name="url_profile"><span data-name="actor_name"></span></a></p>
-		                        </header>
-		                    </article>
-		                </div>
-		            <!-- </section> -->
-
-		            <!-- <section id="directors"> -->
-		            	<h1>Directors</h1>
-		            	<div data-name="directors">
-		            		<article>
-		            			<p>Director name: <span data-name="name"></span></p>
-		            		</article>
-		            	</div>
-		            <!-- </section> -->
-
-		            <!-- <section id="reviews"> -->
-		            	<h1>Reviews</h1>
-		            	<div data-name="reviews">
-		                    <article>
-		                        <header>
-		                            <p>Score: <span data-name="score"></span></p>
-		                            <p>Created at: <span data-name="created_at"></span></p>
-		                            <p>Updated at: <span data-name="updated_at"></span></p>
-		                            <div>
-		                            	<p data-name="review_text"></p>
-		                            </div>
-		                            <!-- <p data-name="review_text"></p> -->
-		                        </header>
-		                    </article>
-		                </div>
-		            <!-- </section> -->
-		        </article>
+	                
+	                <p><a href="" data-name="readMore">Read More</a></p>
+	            </article>
 		    </section>
 
+            <section class="section" id="detail">
+                <h1 data-bind="title"></h1>
+                <header>
+	                <h1 data-name="title"></h1>
+	                <h2>Score: <span data-name="reviews"></span></h2>
+	                <em>Release date: <time data-name="release_date"></time></em>
+            	</header>
+
+	            <figure>
+	                <img src="" alt="" data-name="cover">
+	            </figure>
+	            <div>
+					<h2>Genre:</h2>
+					<ul data-name="genres">
+						<li>
+							<a data-name="genre"></a>
+						</li>
+					</ul>
+				</div>
+
+	            <p data-name="plot"></p>
+
+                <h1>Actors</h1>
+                <div data-name="actors">
+                    <article>
+                        <figure>
+                            <img src="" alt="" data-name="url_photo">
+                        </figure>
+                        <header>
+                        	<ul>
+                        		<li>
+                        			Character: <a href="" data-name="url_character"><span data-name="character"></span></a>
+                        		</li>
+                        		<li>
+                        			Actor name: <a href="" data-name="url_profile"><span data-name="actor_name"></span></a>
+                        		</li>
+                        	</ul>
+                        </header>
+                    </article>
+                </div>
+
+            	<div data-name="directors">
+            		<h1>Directors</h1>
+            		<article>
+            			<p>Director name: <span data-name="name"></span></p>
+            		</article>
+            	</div>
+            </section>
 		</main>
 
 		<header>
 			<nav>
 				<ul>
-					<li><a href="#/about">About</a></li>
-					<li><a href="#/movies">Movies</a></li>
+					<li><a href="#about">About</a></li>
+					<li><a href="#movies">Movies</a></li>
 				</ul>
 			</nav>
 		</header>
 
-
+		<!-- <div id="loading">
+            <h1>Laden...</h1>
+			<img src="static/images/ajax-loader.gif">
+        </div> -->
 		<script src="static/js/vendor/transparency.min.js"></script>
 		<script src="static/js/vendor/routie.js"></script>
 		<script src="static/js/vendor/underscore-min.js"></script>
