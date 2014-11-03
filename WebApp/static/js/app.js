@@ -294,7 +294,7 @@ setTimeout(
 	function(){
 		image.parentNode.removeChild(image);
 		app.controller.init();
-	}, 400);
+	}, 700);
 
 
 

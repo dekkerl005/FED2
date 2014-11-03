@@ -1,16 +1,83 @@
-body > header nav {
-	position:absolute;
-	top:0;
+* {
+	/*padding: 0;
+	margin: 0;*/
 }
 
-#content{
-	margin-top: 5em;
+/* Navigation header */
+	body > header {
+		position:fixed;
+		top:0;
+		left: 0;
+		width: 100%;
+		background: tomato;
+	}
+
+main {
+	margin-top: 5.5em;
 }
 
 section{
 	display: none;
 }
 
-.active{
-	display: block;
-}
+/* Toggle */
+	.active{
+		display: block;
+	}
+
+/* 
+
+	Genre filter:;
+
+	After Gerne is rendered on every movie,
+	hide each Gerne after the first time it's Renderd.
+	(Solving this problem soon)
+
+*/
+
+	.genre-filter:nth-of-type(n+2) {
+		display: none;
+	}
+
+	.genre-filter {
+		position: absolute;
+		width: 12em;
+		height: 100%;
+		top: 0;
+		right: 0;
+		z-index: 1;
+	}
+		
+	.genre-filter div {
+		position: fixed;
+		background: #F9BF3B;
+		width: inherit;
+		height: inherit;
+	}
+	
+	.genre-filter div h2 {
+		color: tomato;
+		padding: 0 1em;
+	}
+
+	.genre-filter div ul {
+		list-style-type: none;
+		padding: 0;
+		background: #999;
+	}
+
+	.genre-filter div ul li{
+		border-bottom: 4px solid tomato;  
+		
+	}
+
+	.genre-filter div ul li a{
+		display: block;
+		width: 100%;
+		padding: .5em 0;
+		background: #b3BF3a;
+		color: #fff;
+		text-align: center;
+		
+	}
+

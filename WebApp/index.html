@@ -10,7 +10,7 @@
 
     </head>
     <body>
-		<main id="content">
+		<main>
 
 			<section class="section" id="about" data-route="about">
 				<header>
@@ -21,15 +21,32 @@
 				</header>
 			</section>
 
-			<div>
-				<h2>Genre:</h2>
-				<ul data-name="genres">
-					<li>
-						<a href="#movies/genre/Crime">Crime</a>
-					</li>
-				</ul>
-			</div>
 			<section class="section" id="movies" data-route="movies">
+				<nav class="genre-filter">
+					<div>
+						<h2>Genres</h2>
+						<ul>
+							<li>
+								<a href="#movies/genre/Horror">Horror</a>
+							</li>
+							<li>
+								<a href="#movies/genre/Crime">Crime</a>
+							</li>
+							<li>
+								<a href="#movies/genre/Drama">Drama</a>
+							</li>
+							<li>
+								<a href="#movies/genre/Thriller">Thriller</a>
+							</li>
+							<li>
+								<a href="#movies/genre/Action">Action</a>
+							</li>
+							<li>
+								<a href="#movies/genre/Adventure">Adventure</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
 				<article>
 		            <header>
 		                <h1 data-name="title"></h1>
@@ -42,7 +59,6 @@
 		            </figure>
 
 		            <div>
-						<h2>Genre:</h2>
 						<ul data-name="genres">
 							<li>
 								<a data-name="genre"></a>
@@ -68,7 +84,6 @@
 	                <img src="" alt="" data-name="cover">
 	            </figure>
 	            <div>
-					<h2>Genre:</h2>
 					<ul data-name="genres">
 						<li>
 							<a data-name="genre"></a>
@@ -87,10 +102,10 @@
                         <header>
                         	<ul>
                         		<li>
-                        			Character: <a href="" data-name="url_character"><span data-name="character"></span></a>
+                        			Name: <a href="" data-name="url_profile"><span data-name="actor_name"></span></a>
                         		</li>
                         		<li>
-                        			Actor name: <a href="" data-name="url_profile"><span data-name="actor_name"></span></a>
+                        			Character: <a href="" data-name="url_character"><span data-name="character"></span></a>
                         		</li>
                         	</ul>
                         </header>
@@ -100,7 +115,7 @@
             	<div data-name="directors">
             		<h1>Directors</h1>
             		<article>
-            			<p>Director name: <span data-name="name"></span></p>
+            			<p>Name: <span data-name="name"></span></p>
             		</article>
             	</div>
             </section>
@@ -115,10 +130,6 @@
 			</nav>
 		</header>
 
-		<!-- <div id="loading">
-            <h1>Laden...</h1>
-			<img src="static/images/ajax-loader.gif">
-        </div> -->
 		<script src="static/js/vendor/transparency.min.js"></script>
 		<script src="static/js/vendor/routie.js"></script>
 		<script src="static/js/vendor/underscore-min.js"></script>
