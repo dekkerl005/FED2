@@ -4,7 +4,6 @@ var movies = document.getElementById('movies');
 // by default, it only adds horizontal recognizers
 var mc = new Hammer(movies);
 
-
 var panFilter = document.getElementById('pan-filter');
 
 // listen to events...

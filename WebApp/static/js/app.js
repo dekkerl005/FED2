@@ -9,6 +9,7 @@ var app = app || {};
 			app.config.init();
 			app.router.init();
 			app.sections.init();
+			app.gestures.init();
 		}
 	}
 
@@ -30,17 +31,12 @@ var app = app || {};
                 },
                 
                 'movies/:id': function(id){
-                    console.log("details page of movie " + id);
+                    console.log("Detailpage movie: " + id);
                     app.sections.movieDetail(id);
                 },
                 '*': function() {
-                    // app.sections.toggle('section[data-route="about"]');
-					app.sections.toggle("about");
-
-                    console.log("route changed: default");
-
-                    app.content.about
-                    console.log("get data for: about");
+                    console.log("Default: About");
+					app.sections.toggle("about"); d
                 }
                 
 			});
@@ -133,8 +129,8 @@ var app = app || {};
 
 		moviesSucces: function(text) {
             app.hideAllSections();
-			console.log('Parsed data', JSON.parse(text));
 			app.content.movies = JSON.parse(text);
+			console.log('Parsed data', JSON.parse(text));
 			console.log('Data from data object', app.content.movies);
 
 			Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
@@ -180,12 +176,44 @@ var app = app || {};
 			else if (section == "movies") {
 				app.hideAllSections();
 				document.querySelector('#movies').classList.add('active');
-			} else {
-				app.hideAllSections();
-				document.querySelector('#about').classList.add('active');
-			}
+			} 
+			// else {
+			// 	app.hideAllSections();
+			// 	document.querySelector('#about').classList.add('active');
+			// }
 		}
 
+	}
+
+	app.gestures = {
+		init: function() {
+			app.gestures.genreFilter();
+		},
+
+		genreFilter: function() {
+			// var movies = document.getElementById('movies');
+			var movies = document.getElementsByClassName('genre-filter')[0];
+
+			// create a simple instance
+			// by default, it only adds horizontal recognizers
+			var mc = new Hammer(movies);
+
+			var panFilter = document.getElementById('pan-filter');
+
+			panFilter.classList.add('panRight');
+
+			// listen to events...
+			mc.on("panleft", function(ev) {
+			    panFilter.classList.remove('panRight');
+			    panFilter.classList.add('panLeft');
+
+			});
+
+			mc.on("panright", function(ev) {
+			    panFilter.classList.remove('panLeft');
+			    panFilter.classList.add('panRight');
+			});
+		}
 	}
     
 	app.config = {
@@ -216,7 +244,7 @@ var app = app || {};
             genres: { 
                 genre: {
                     href: function() {
-                        return "#movies/genre/" + (this.value);
+                        return "#movies/genre/" + this.value;
                     },
                     text: function() {
                         return this.value;
@@ -282,6 +310,7 @@ var app = app || {};
 		}
 
 	}
+
 })();
 // app.controller.init();
 
@@ -294,7 +323,7 @@ setTimeout(
 	function(){
 		image.parentNode.removeChild(image);
 		app.controller.init();
-	}, 700);
+	}, 100);
 
 
 

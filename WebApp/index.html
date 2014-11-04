@@ -27,22 +27,23 @@
 						<h2>Genres</h2>
 						<ul>
 							<li>
-								<a href="#movies/genre/Horror">Horror</a>
+								<a href="#movies/genre/Action">Action</a>
+							</li>
+							<li>
+								<a href="#movies/genre/Adventure">Adventure</a>
 							</li>
 							<li>
 								<a href="#movies/genre/Crime">Crime</a>
 							</li>
 							<li>
+								<a href="#movies/genre/Horror">Horror</a>
+							</li>
+							
+							<li>
 								<a href="#movies/genre/Drama">Drama</a>
 							</li>
 							<li>
 								<a href="#movies/genre/Thriller">Thriller</a>
-							</li>
-							<li>
-								<a href="#movies/genre/Action">Action</a>
-							</li>
-							<li>
-								<a href="#movies/genre/Adventure">Adventure</a>
 							</li>
 						</ul>
 					</div>
@@ -73,26 +74,35 @@
 		    </section>
 
             <section class="section" id="detail">
-                <h1 data-bind="title"></h1>
-                <header>
-	                <h1 data-name="title"></h1>
-	                <h2>Score: <span data-name="reviews"></span></h2>
-	                <em>Release date: <time data-name="release_date"></time></em>
-            	</header>
+            	<article>
+	                <h1 data-bind="title"></h1>
+	                <header>
+		                <h1 data-name="title"></h1>
+		                <h2>Score: <span data-name="reviews"></span></h2>
+		                <em>Release date: <time data-name="release_date"></time></em>
+	            	</header>
 
-	            <figure>
-	                <img src="" alt="" data-name="cover">
-	            </figure>
-	            
-	            <div>
-					<ul data-name="genres">
-						<li>
-							<a data-name="genre"></a>
-						</li>
-					</ul>
-				</div>
+		            <figure>
+		                <img src="" alt="" data-name="cover">
+		            </figure>
 
-	            <p data-name="plot"></p>
+		            <div>
+						<ul data-name="genres">
+							<li>
+								<a data-name="genre"></a>
+							</li>
+						</ul>
+					</div>
+
+		            <p data-name="plot"></p>
+				</article>
+
+				<h1>Directors</h1>
+				<div data-name="directors">
+            		<article>
+            			<p>Name: <span data-name="name"></span></p>
+            		</article>
+            	</div>
 
                 <h1>Actors</h1>
                 <div data-name="actors">
@@ -112,13 +122,6 @@
                         </header>
                     </article>
                 </div>
-
-            	<div data-name="directors">
-            		<h1>Directors</h1>
-            		<article>
-            			<p>Name: <span data-name="name"></span></p>
-            		</article>
-            	</div>
             </section>
 		</main>
 
@@ -133,9 +136,8 @@
 
 		<script src="static/js/vendor/transparency.min.js"></script>
 		<script src="static/js/vendor/routie.js"></script>
-		<script src="static/js/vendor/underscore-min.js"></script>
+		<script src="static/js/vendor/underscore.min.js"></script>
 		<script src="static/js/vendor/hammer.min.js"></script>
-		<script src="static/js/gesture.js"></script>
 		<script src="static/js/app.js"></script>
     </body>
 </html>
