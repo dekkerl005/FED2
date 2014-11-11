@@ -1,14 +1,6 @@
 // NameSpace of Module pattern
 var appCMD = appCMD || {};
 
-/* 
-	If genre === current added to an a tag
-	--> if click on a tag:
-		--> loop through every a tag in that nav
-			--> check witch is current active
-			--> delete current of every a tag exept the one thats clicked on
-*/
-
 // Self Invoking Anonymous Function
 (function(){
 
