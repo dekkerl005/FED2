@@ -1,4 +1,4 @@
-<!doctype html>
+<!Doctype html>
 <html>
     <head>
         <meta charset="utf-8">
@@ -13,12 +13,14 @@
 		<main>
 
 			<section class="section" id="about" data-route="about">
-				<header>
-					<h1 data-name="title"></h1>
+				<article>
+					<header>
+						<h1 data-name="title"></h1>
+					</header>
 					<div data-name="description">
 						<p data-name="paragraph"></p>
 					</div>
-				</header>
+				</article>
 			</section>
 
 			<section class="section" id="movies" data-route="movies">
@@ -27,23 +29,26 @@
 						<h2>Genres</h2>
 						<ul>
 							<li>
-								<a href="#movies/genre/Action">Action</a>
+								<a href="#/movies" class="current">All</a>
 							</li>
 							<li>
-								<a href="#movies/genre/Adventure">Adventure</a>
+								<a href="#/movies/genre/Action">Action</a>
 							</li>
 							<li>
-								<a href="#movies/genre/Crime">Crime</a>
+								<a href="#/movies/genre/Adventure">Adventure</a>
 							</li>
 							<li>
-								<a href="#movies/genre/Horror">Horror</a>
+								<a href="#/movies/genre/Crime">Crime</a>
+							</li>
+							<li>
+								<a href="#/movies/genre/Horror">Horror</a>
 							</li>
 							
 							<li>
-								<a href="#movies/genre/Drama">Drama</a>
+								<a href="#/movies/genre/Drama">Drama</a>
 							</li>
 							<li>
-								<a href="#movies/genre/Thriller">Thriller</a>
+								<a href="#/movies/genre/Thriller">Thriller</a>
 							</li>
 						</ul>
 					</div>
@@ -75,7 +80,6 @@
 
             <section class="section" id="detail">
             	<article>
-	                <h1 data-bind="title"></h1>
 	                <header>
 		                <h1 data-name="title"></h1>
 		                <h2>Score: <span data-name="reviews"></span></h2>
@@ -128,16 +132,21 @@
 		<header>
 			<nav>
 				<ul>
-					<li><a href="#about">About</a></li>
-					<li><a href="#movies">Movies</a></li>
+					<li><a href="#/about">About</a></li>
+					<li><a href="#/movies">Movies</a></li>
 				</ul>
 			</nav>
+			<div id="menu-icon">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
 		</header>
 
 		<script src="static/js/vendor/transparency.min.js"></script>
-		<script src="static/js/vendor/routie.js"></script>
 		<script src="static/js/vendor/underscore.min.js"></script>
 		<script src="static/js/vendor/hammer.min.js"></script>
+		<script src="static/js/vendor/routie.js"></script>
 		<script src="static/js/app.js"></script>
     </body>
 </html>

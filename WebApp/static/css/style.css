@@ -1,5 +1,11 @@
 body {
 	font-family: helvetica;
+	background: #F3F3F3;
+	color: #454545;
+}
+
+.loader {
+	margin: 10% 0 0 46%;
 }
 
 /* Default settings */
@@ -17,6 +23,7 @@ body {
 
 	p {
 		line-height: 1.4em;
+		color: #777;
 	}
 
 	/* Toggle */
@@ -24,18 +31,20 @@ body {
 		display: block;
 	}
 
-/* Navigation header */
+/* Navigation header NAV */
 	body > header {
 		position:fixed;
 		top:0;
 		left: 0;
 		width: 100%;
 		height: inherit;
-		background: #F86D5F;
+		background: #5FD5B3;
+
 	}
 	body > header nav {
 		padding: .45em 1.2em;
 		margin: 0;
+		width: 80%;
 	}
 	body > header ul {
 		list-style-type: none;
@@ -48,13 +57,35 @@ body {
 	}
 	body > header ul li a {
 		color: #fff;
-		background: #E14743;
+		background: rgba(0,0,0,.2);
 		font-size: 115%;
 		letter-spacing: .05em;
 		padding: .8em 1em;
-		/*padding: 0 .7em .3em .7em;*/
-		/*border-bottom: 3px solid #fff;*/
 	}
+
+	/* Hamburger Menu */
+		body > header > div {
+			position: absolute;
+			/*background: rgba(0,0,0, .3);*/
+			top: 0;
+			right: -.5em;
+			float: left;
+			padding: 1em 0 1em 1em;
+			margin-top: .313em; 
+
+			-webkit-transition: .3s ease;
+
+		}
+		body > header > div > div {
+			width: 2em;
+			height: 0.313em;
+			background: #fff;
+			border-radius: 2px;
+		}
+
+		body > header > div > div:nth-of-type(n+2) {
+			margin-top: .250em; 
+		}
 
 main {
 	margin-top: 5.5em;
@@ -62,20 +93,52 @@ main {
 
 section {
 	display: none;
-	padding: 0 .8em;
+	margin: 0 .8em;
 }
 
+
+/* About */
+	section:nth-of-type(1) {
+		background: #fff;
+		padding: 4%;
+	}
+
+	section:nth-of-type(1) article header h1 {
+		margin-top: .3em; 
+	}
 
 /* Movies */
 
 	section:nth-of-type(2) article {
-		border-bottom: 1px solid #bbb;
+		border-bottom: 1px solid #D9DAD5;
 		margin-bottom: 2em; 
+		background: #fff;
+		padding: 4%;
+	}
+
+	section:nth-of-type(2) h1 {
+		margin: 0;
+	}
+
+	section:nth-of-type(n+2) article h2 {
+		background: #43B9F9;
+		color: #fff;
+		padding: .5em .8em;
+		margin: .8em 0;
+		display: inline-block;
+	}
+	section:nth-of-type(n+2) em {
+		display: block;
+		color: #B7B7B7;
 	}
 
 	/* movies / movie detail */
-	section:nth-of-type(n+2) article header h1 {
-		margin: 0 0 .6em 0;
+	section:nth-of-type(3) {
+		background: #fff;
+		padding: 4%;
+	}
+	section:nth-of-type(3) article header h1 {
+		margin: 0 0; 
 	}
 	
 	/* Cover */
@@ -88,7 +151,7 @@ section {
 		}
 
 	/* Plot */
-		section article > p[data-name="plot"]{
+		section#movies article > p[data-name="plot"]{
 		    overflow: hidden;
 		    height: 4em;
 			display: -webkit-box;
@@ -144,8 +207,10 @@ section {
 		}
 			
 		.genre-filter div {
+			top: 4.213em;
 			position: fixed;
 			background: #F9BF3B;
+			background: #586474;
 			width: inherit;
 			height: inherit;
 
@@ -154,83 +219,138 @@ section {
 		}
 		
 		.genre-filter div h2 {
-			color: tomato;
+			color: #F2F2F2;
 			padding: 0 1em;
 		}
 
 		.genre-filter div ul {
 			list-style-type: none;
 			padding: 0;
-			background: #999;
 		}
 
 		.genre-filter div ul li{
-			border-bottom: 4px solid tomato;  
+			/*border-bottom: 1px solid tomato;*/
 			
 		}
 
-		.genre-filter div ul li a{
+		.genre-filter div ul li a {
 			display: block;
 			width: 100%;
-			padding: .5em 0;
-			background: #b3BF3a;
+			padding: .8em 0;
+			/*background: #6A7788;*/
 			color: #fff;
 			text-align: center;		
 		}
+
+		.genre-filter div ul li a.current, 
+		.genre-filter div ul li a:hover, 
+		.genre-filter div ul li a:active {
+			background: #6A7788;
+			border-left: 4px solid #5FD5B3;	
+		}
+
+		/*#6A7788*/
 		
 		/* Gesture hammer.js */
 
 			/* Genre Filter */
-				.panLeft {
-					-ms-transform: translateX(0em); /* IE 9 */
-				   	-webkit-transform: translateX(0em); /* Chrome, Safari, Opera */
-				    transform: translateX(0em);
-				}
+				/* Menu bar */
+					.panLeft {
+						-ms-transform: translateX(0em); /* IE 9 */
+					   	-webkit-transform: translateX(0em); /* Chrome, Safari, Opera */
+					    transform: translateX(0em);
+					}
 
-				.panRight {
-					-ms-transform: translateX(10em); /* IE 9 */
-				   	-webkit-transform: translateX(10em); /* Chrome, Safari, Opera */
-				    transform: translateX(10em);
-				}
+					.panRight {
+						-ms-transform: translateX(10em); /* IE 9 */
+					   	-webkit-transform: translateX(10em); /* Chrome, Safari, Opera */
+					    transform: translateX(10em);
+					}
+
+				/* Menu icon*/
+					.slideIn {
+						-ms-transform: translateX(.750em); /* IE 9 */
+					   	-webkit-transform: translateX(.750em); /* Chrome, Safari, Opera */
+					    transform: translateX(.750em);
+					}
+
+					.slideOut {
+						-ms-transform: translateX(0em); /* IE 9 */
+					   	-webkit-transform: translateX(0em); /* Chrome, Safari, Opera */
+					    transform: translateX(0em);
+					}
 
 	/* Directors */
 
 	/* Actors */
-		div[data-name="actors"] {
-			display: flex;
-			flex-direction: row;
-
-			-webkit-flex-flow: row wrap;
-  			flex-flow: row wrap;
-		}
-
-		div[data-name="actors"] article {
-			
-		}
 
 		div[data-name="actors"] article ul {
 			list-style-type: none;
 			padding: 0;
 		}
 
+@media all and (min-width: 545px) {
 
-@media all and (min-width: 740px) {
+   	div[data-name="actors"] {
+	   display: -webkit-flex;
+	   display: flex;
+	   -webkit-align-items: left;
+	   align-items: left;
+	   -webkit-justify-content: left;
+	   justify-content: left;
+	   /* You can set flex-wrap and flex-direction individually */
+	   -webkit-flex-direction: row;
+	   flex-direction: row;
+	   -webkit-flex-wrap: wrap;
+	   flex-wrap: wrap;
+	   /* Or do it all in one line with flex flow */
+	   -webkit-flex-flow: row wrap;
+	   flex-flow: row wrap;
+	   /* tweak the where items line up on the row */
+	   /* valid values are: flex-start, flex-end, space-between, space-around, stretch */
+	   -webkit-align-content: flex-end;
+	   align-content: flex-end;
+	}
+
+	div[data-name="actors"] article {
+		width: 50%;
+	}
+}
+
+
+@media all and (min-width: 770px) {
 
    	section:nth-of-type(2) article {
-		width: 47%;
+		width: 45%;
 		float: left;
+		padding: 2%;
+
 	}
 
 	/* 2e row*/
 	section:nth-of-type(2) article:nth-of-type(2n) {
-		margin-left: 3%; 
+		margin-left: 2%; 
+	}
+
+	section:nth-of-type(1), section:nth-of-type(3) {
+		padding: 2%;
+
 	}
 }
 
-@media all and (min-width: 1180px) {
+
+@media all and (min-width: 820px) {
+
+	div[data-name="actors"] article {
+		width: 33%;
+	}
+
+}
+
+@media all and (min-width: 1210px) {
 
    	section:nth-of-type(2) article {
-		width: 30%;
+		width: 28%;
 		float: left;
 	}
 
@@ -241,12 +361,12 @@ section {
 
 	/* 2e row */
 	section:nth-of-type(2) article:nth-of-type(3n-1) {
-		margin-left: 3%; 
+		margin-left: 2%; 
 	}
 
 	/* 3e row */
 	section:nth-of-type(2) article:nth-of-type(3n) {
-		margin-left: 3%; 
+		margin-left: 2%; 
 	}
 
 	.genre-filter {
@@ -259,5 +379,18 @@ section {
 	    transform: translateX(12em);
 	}
 
+	div[data-name="actors"] article {
+		width: 25%;
+	}
+
 }
+
+@media all and (min-width: 1400px) {
+
+	div[data-name="actors"] article {
+		width: 20%;
+	}
+	
+}
+
 

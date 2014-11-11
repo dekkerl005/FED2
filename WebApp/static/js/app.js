@@ -1,42 +1,51 @@
 // NameSpace of Module pattern
-var app = app || {};
+var appCMD = appCMD || {};
+
+/* 
+	If genre === current added to an a tag
+	--> if click on a tag:
+		--> loop through every a tag in that nav
+			--> check witch is current active
+			--> delete current of every a tag exept the one thats clicked on
+*/
 
 // Self Invoking Anonymous Function
 (function(){
 
-	app.controller = {
+	appCMD.controller = {
 		init: function(){
-			app.config.init();
-			app.router.init();
-			app.sections.init();
-			app.gestures.init();
+			appCMD.config.init();
+			appCMD.router.init();
+			appCMD.sections.init();
+			appCMD.gestures.init();
 		}
 	}
 
-	app.router = {
+	appCMD.router = {
 
 		init: function() {
+			// Routie checks de link after # to see what needs to run.
 			routie({
-			    'about': function() {
+			    '/about': function() {
 			    	console.log("About");
-					app.sections.toggle("about");
+					appCMD.sections.toggle("about");
 			    },
-			    'movies': function() {
+			    '/movies': function() {
 			    	console.log("Movies");
-					app.sections.movies();
+					appCMD.sections.movies();
 			    },
-                'movies/genre/:genre':function(genre){
+                '/movies/genre/:genre':function(genre){
                     console.log("Genre: " + genre);
-                    app.sections.moviesByGenre(genre);
+                    appCMD.sections.moviesByGenre(genre);
                 },
                 
-                'movies/:id': function(id){
+                '/movies/:id': function(id){
                     console.log("Detailpage movie: " + id);
-                    app.sections.movieDetail(id);
+                    appCMD.sections.movieDetail(id);
                 },
                 '*': function() {
                     console.log("Default: About");
-					app.sections.toggle("about"); d
+					appCMD.sections.toggle("about");
                 }
                 
 			});
@@ -44,7 +53,7 @@ var app = app || {};
 
 	}
 
-	app.content = {
+	appCMD.skeleton = {
 
 		about: {
 			title: "About this app",
@@ -69,82 +78,55 @@ var app = app || {};
 		movies: {},
 	}
     
-    app.hideAllSections = function() {
-        _.each(document.getElementsByClassName("section"), function(el){
-            el.classList.remove('active'); 
-        });
-    }
-    
-    app.manipulatieData =  {
-            reviewData: function() {
-                console.log("manipulate review scores")
-                // get data
-                var data = JSON.parse(localStorage.getItem('films'));
-                //map reduce
-                _.map(data, function (movie, i) {
-                        movie.reviews = _.reduce(movie.reviews,   function(memo, review){ return memo + review.score; }, 0) / movie.reviews.length;
-
-                console.log(movie.reviews)
-                return movie;
-                })  
-	        app.content.movies = data;
-	        console.log(app.content.movies)
-	        return data;
-         
-        }
-    }
-
-	app.sections = {
+	appCMD.sections = {
 
 		init: function() {
-            app.manipulatieData.reviewData();
-			app.sections.about();
-			app.sections.movies();
-			app.sections.toggle();
+            appCMD.reviews.average();
+			this.about();
+			this.movies();
+			this.toggle();
 			
 		},
 
 		about: function() {
-			app.hideAllSections();
-            Transparency.render(document.getElementById('about'), app.content.about);
+			appCMD.utility.hideAllSections();
+            Transparency.render(document.getElementById('about'), appCMD.skeleton.about);
 		},
 
 		movies: function() {
-			app.hideAllSections();
+			appCMD.utility.hideAllSections();
             var self = this;
 
 			// Movies
             document.getElementById('movies').classList.add('active');
            	
 			if(localStorage.getItem('films')){
-				Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
-				Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
+				Transparency.render(document.getElementById('movies'), appCMD.skeleton.movies, appCMD.config.directives);
 			}
 			else{
-				app.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
-
+				appCMD.config.xhr.trigger("GET", "http://dennistel.nl/movies", self.moviesSucces, "JSON");
 			}
 
 		},
 
 		moviesSucces: function(text) {
-            app.hideAllSections();
-			app.content.movies = JSON.parse(text);
+            appCMD.utility.hideAllSections();
+			appCMD.skeleton.movies = JSON.parse(text);
 			console.log('Parsed data', JSON.parse(text));
-			console.log('Data from data object', app.content.movies);
+			console.log('Data from data object', appCMD.skeleton.movies);
 
-			Transparency.render(document.getElementById('movies'), app.content.movies, app.config.directives);
-			Transparency.render(document.getElementById('movie'), app.content.movieTitle, app.config.directives);
+			Transparency.render(document.getElementById('movies'), appCMD.skeleton.movies, appCMD.config.directives);
 
 			localStorage.setItem('films', text);
 		},
         
         moviesByGenre:function(genre){
-            app.hideAllSections();
+            appCMD.utility.hideAllSections();
             document.getElementById('movies').classList.add('active');
             
-            var movies = app.content.movies;
+            var movies = appCMD.skeleton.movies;
             
+            // Looks through each value in the movies, returning an array of all the values that pass a truth test
             var filteredMovies = _.filter(movies, function(movie){
                 for(var i=0; i<movie.genres.length; i++){
                     if(movie.genres[i] == genre) return true;
@@ -152,71 +134,101 @@ var app = app || {};
                 return false;
             });
             
-            Transparency.render(document.getElementById('movies'), filteredMovies, app.config.directives);
+            Transparency.render(document.getElementById('movies'), filteredMovies, appCMD.config.directives);
         },
         
         movieDetail: function(id){
-            app.hideAllSections();
+            appCMD.utility.hideAllSections();
             
-            var movies = app.content.movies;
+            var movies = appCMD.skeleton.movies;
             
+            // Makes a Int of a string
             id = parseInt(id);
             
+            // _.findWhere search through the movie array to find the id. When it finds the id it returns the movie with the id it found
             var movie = _.findWhere(movies, {id: id});
             
             document.getElementById('detail').classList.add('active');
-            Transparency.render(document.getElementById('detail'), movie, app.config.directives);
+            Transparency.render(document.getElementById('detail'), movie, appCMD.config.directives);
         },
 
 		toggle: function(section) {
 			if (section == "about") {
-				app.hideAllSections();
+				appCMD.utility.hideAllSections();
 				document.querySelector('#about').classList.add('active');
 			} 
 			else if (section == "movies") {
-				app.hideAllSections();
+				appCMD.utility.hideAllSections();
 				document.querySelector('#movies').classList.add('active');
 			} 
-			// else {
-			// 	app.hideAllSections();
-			// 	document.querySelector('#about').classList.add('active');
-			// }
+			else {
+				appCMD.utility.hideAllSections();
+				document.querySelector('#about').classList.add('active');
+			}
 		}
 
 	}
 
-	app.gestures = {
+	appCMD.reviews =  {
+		// Method average calculates the average score of the reviews on each movie.
+        average: function() {
+            console.log("manipulate review scores");
+
+            // get data
+            var data = JSON.parse(localStorage.getItem('films'));
+
+            // _.map == Produces a new array and fills this with the movies
+            _.map(data, function (movie, i) {
+            		// _.reduce == Reduces down a list of values into a single value.
+                    movie.reviews = _.reduce(movie.reviews,   function(memo, review){ return memo + review.score; }, 0) / movie.reviews.length;
+
+            console.log(movie.reviews)
+            return movie;
+            })  
+        appCMD.skeleton.movies = data;
+        console.log(appCMD.skeleton.movies)
+        return data;
+     
+    	}
+    }
+
+	appCMD.gestures = {
 		init: function() {
-			app.gestures.genreFilter();
+			this.genreFilter();
 		},
 
+		// genreFilter adds a gesture and animations on swipe
 		genreFilter: function() {
-			// var movies = document.getElementById('movies');
 			var movies = document.getElementsByClassName('genre-filter')[0];
 
-			// create a simple instance
 			// by default, it only adds horizontal recognizers
 			var mc = new Hammer(movies);
 
 			var panFilter = document.getElementById('pan-filter');
+			var slideMenuIcon = document.getElementById('menu-icon');
 
 			panFilter.classList.add('panRight');
 
-			// listen to events...
 			mc.on("panleft", function(ev) {
 			    panFilter.classList.remove('panRight');
 			    panFilter.classList.add('panLeft');
+
+			    slideMenuIcon.classList.remove('slideOut');
+			    slideMenuIcon.classList.add('slideIn');
 
 			});
 
 			mc.on("panright", function(ev) {
 			    panFilter.classList.remove('panLeft');
 			    panFilter.classList.add('panRight');
+
+			    slideMenuIcon.classList.remove('slideIn');
+			    slideMenuIcon.classList.add('slideOut');
 			});
 		}
 	}
     
-	app.config = {
+	appCMD.config = {
 		init: function() {
             this.transparency();
         },
@@ -232,19 +244,22 @@ var app = app || {};
 			cover: {
 			    src: function(params) {
 			      	return this.cover;
+			    },
+			    alt: function() {
+			    	return this.title + ' cover';
 			    }
 		  	},
             
             readMore: {
                 href: function(params) {
-                    return '#movies/' + this.id;
+                    return '#/movies/' + this.id;
                 }
             },
 
             genres: { 
                 genre: {
                     href: function() {
-                        return "#movies/genre/" + this.value;
+                        return "#/movies/genre/" + this.value;
                     },
                     text: function() {
                         return this.value;
@@ -267,7 +282,15 @@ var app = app || {};
                 url_photo: {
                     src: function(params) {
                         return this.url_photo;
-                    }
+                    },
+                    alt: function() {
+                    	if (this.title != undefined){
+                    		return this.title + ' cover';
+                    	} 
+                    	else {
+                    		return 'Photo of actor';
+                    	}
+				    }
                 },
                 url_character: {
                     text: function(params) {
@@ -311,19 +334,32 @@ var app = app || {};
 
 	}
 
-})();
-// app.controller.init();
+	appCMD.utility = {
+		init: function() {
+			this.hideAllSections();
+		},
 
+		// hideAllSections loops through every 'section' class and removes class 'active'.
+		hideAllSections: function () {
+			_.each(document.getElementsByClassName("section"), function(el) {
+	            el.classList.remove('active'); 
+	        });
+		}
+
+	}
+
+})();
 
 var image = document.createElement('img');
 image.setAttribute('src', 'static/images/ajax-loader.gif');
+image.classList.add('loader');
 document.getElementsByTagName('body')[0].appendChild(image);
 
 setTimeout(
 	function(){
 		image.parentNode.removeChild(image);
-		app.controller.init();
-	}, 100);
+		appCMD.controller.init();
+	}, 1800);
 
 
 
