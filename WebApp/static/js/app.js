@@ -30,7 +30,6 @@ var appCMD = appCMD || {};
                     console.log("Genre: " + genre);
                     appCMD.sections.moviesByGenre(genre);
                 },
-                
                 '/movies/:id': function(id){
                     console.log("Detailpage movie: " + id);
                     appCMD.sections.movieDetail(id);
